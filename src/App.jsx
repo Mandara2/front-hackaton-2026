@@ -372,13 +372,13 @@ export default function App() {
             <button
               onClick={() => setLang(lang === "es" ? "en" : "es")}
               className="flex items-center gap-1.5 text-sm px-3 py-2 rounded-full font-semibold transition-all hover:opacity-90"
-              style={{ background: "rgba(255,255,255,0.95)", color: "#0a0f0a", border: "1px solid rgba(255,255,255,0.5)" }}
+              style={{ background: "rgba(255,255,255,0.08)", color: "#e8f5d0", border: "1px solid rgba(134,187,74,0.35)" }}
               title={lang === "es" ? "English" : "Español"}
             >
               <Languages size={16} />
               {lang === "es" ? "ES" : "EN"}
             </button>
-            <button className="text-sm px-4 py-2 rounded-full font-semibold transition-all hover:opacity-90" style={{ background: "rgba(255,255,255,0.95)", color: "#0a0f0a", border: "1px solid rgba(255,255,255,0.5)" }}>
+            <button className="text-sm px-4 py-2 rounded-full font-semibold transition-all hover:opacity-90" style={{ background: "rgba(255,255,255,0.08)", color: "#e8f5d0", border: "1px solid rgba(134,187,74,0.35)" }}>
               {t.navHosts}
             </button>
           </div>
@@ -631,6 +631,9 @@ export default function App() {
           <span className="font-bold" style={{ color: "#e8f5d0", fontFamily: "'Playfair Display', serif" }}>CaldasTurismo</span>
         </div>
         <p className="text-xs" style={{ color: "#3d5a2a" }}>{t.footerTagline}</p>
+        <div className="mt-4 pt-4 max-w-4xl mx-auto" style={{ borderTop: "1px solid rgba(134,187,74,0.08)" }}>
+          <p className="text-xs" style={{ color: "#3d5a2a" }}>© 2026 CaldasTurismo · Desarrollado por Neo Astrum</p>
+        </div>
       </footer>
 
       {selectedProperty && (
