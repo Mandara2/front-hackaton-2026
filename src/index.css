@@ -69,7 +69,7 @@
   opacity: 0;
   animation-name: cloudDrift;
   animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
 }
 .cloud-1  { top: 3%;  --cloud-scale: 0.5;  animation-duration: 2.4s; animation-delay: 0s; }
 .cloud-2  { top: 9%;  --cloud-scale: 1.6;  animation-duration: 3.6s; animation-delay: 0.3s; }

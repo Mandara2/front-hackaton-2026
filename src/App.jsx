@@ -671,9 +671,10 @@ export default function App() {
         </div>
       )}
 
-      {/* Nubes: fluyen desde que la IA empieza a buscar, durante el mapa, y al volver a Explorar */}
+      {/* Nubes: una sola pasada desde que la IA empieza a buscar hasta que abre el mapa;
+          otra pasada nueva (key cambia) al volver a Explorar. Nunca quedan en loop. */}
       {(searchLoading || view === "map" || mapClosing) && (
-        <div className="cloud-layer" aria-hidden="true">
+        <div key={mapClosing ? "cloud-exit" : "cloud-enter"} className="cloud-layer" aria-hidden="true">
           <span className="cloud cloud-1" />
           <span className="cloud cloud-2" />
           <span className="cloud cloud-3" />
