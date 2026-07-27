@@ -193,7 +193,10 @@ export default function MapView({ onBack, t, matchIds }) {
                       url: i.url?.startsWith("/") && baseURL ? baseURL + i.url : i.url,
                       type: i.type || "image",
                     }));
-                    return normalizeCarouselItems([...staticUrls, ...dynamicWithAbsUrl], baseURL);
+                    // No pasar baseURL aquí: dynamicWithAbsUrl ya resolvió su propia URL absoluta
+                    // arriba, y staticUrls (galería local en /imgs/...) es relativa al FRONTEND,
+                    // no al backend — anteponerle baseURL (backend) rompía la carga (404 -> placeholder).
+                    return normalizeCarouselItems([...staticUrls, ...dynamicWithAbsUrl]);
                   })()}
                   alt={selectedPoint.name}
                 />

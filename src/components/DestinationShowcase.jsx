@@ -26,7 +26,7 @@ export default function DestinationShowcase({ properties, loading, t, onSelect }
           key={property.id}
           type="button"
           onClick={() => onSelect(property)}
-          className="group relative w-full h-56 md:h-64 rounded-2xl overflow-hidden text-left"
+          className="group relative w-full h-72 md:h-96 rounded-2xl overflow-hidden text-left"
         >
           <img
             src={getImageUrl(property)}

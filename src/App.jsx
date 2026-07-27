@@ -631,7 +631,8 @@ export default function App() {
           <span className="font-bold" style={{ color: "#e8f5d0", fontFamily: "'Playfair Display', serif" }}>CaldasTurismo</span>
         </div>
         <p className="text-xs" style={{ color: "#3d5a2a" }}>{t.footerTagline}</p>
-        <div className="mt-4 pt-4 max-w-4xl mx-auto" style={{ borderTop: "1px solid rgba(134,187,74,0.08)" }}>
+        <div className="mt-4 pt-4 max-w-4xl mx-auto flex items-center justify-center gap-2" style={{ borderTop: "1px solid rgba(134,187,74,0.08)" }}>
+          <img src="/imgs/neo-astrum-logo.png" alt="Neo Astrum" className="h-4 w-4 object-contain" />
           <p className="text-xs" style={{ color: "#3d5a2a" }}>© 2026 CaldasTurismo · Desarrollado por Neo Astrum</p>
         </div>
       </footer>
