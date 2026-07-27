@@ -3,6 +3,7 @@ import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognitio
 import { Search, MapPin, Star, Mic, Bird, Coffee, Wifi, Car, UtensilsCrossed, ChevronRight, X, Calendar, Users, Globe, Languages, Loader2, Sparkles } from "lucide-react";
 import { getProperties, postBookings, postSearch } from "./api/client";
 import MapView from "./components/MapView";
+import DestinationShowcase from "./components/DestinationShowcase";
 import { translations, TAG_KEYS } from "./i18n/translations";
 import { getImageUrl, handleImageError } from "./utils/image";
 
@@ -276,6 +277,7 @@ export default function App() {
   const [searchLoading, setSearchLoading] = useState(false);
   const [aiMatches, setAiMatches] = useState(null);
   const [apiError, setApiError] = useState(null);
+  const [focusPropertyId, setFocusPropertyId] = useState(null);
 
   const t = translations[lang];
 
@@ -307,6 +309,7 @@ export default function App() {
       setSearchLoading(true);
       setApiError(null);
       setAiMatches(null);
+      setFocusPropertyId(null);
       try {
         const data = await postSearch(q, lang);
         const matches = Array.isArray(data?.data?.matches) ? data.data.matches : [];
@@ -321,6 +324,7 @@ export default function App() {
       }
     } else {
       setAiMatches(null);
+      setFocusPropertyId(null);
       try {
         await getProperties();
         setView("map");
@@ -364,7 +368,7 @@ export default function App() {
           </div>
           <div className="flex items-center gap-4">
             <span role="button" onClick={() => setView("home")} className="text-sm cursor-pointer transition-colors hover:text-green-400" style={{ color: view === "home" ? "#86bb4a" : "#6b8f4e" }}>{t.navExplore}</span>
-            <span role="button" onClick={() => { setAiMatches(null); setView("map"); }} className="text-sm cursor-pointer transition-colors hover:text-green-400" style={{ color: view === "map" ? "#86bb4a" : "#6b8f4e" }}>{t.navMap}</span>
+            <span role="button" onClick={() => { setAiMatches(null); setFocusPropertyId(null); setView("map"); }} className="text-sm cursor-pointer transition-colors hover:text-green-400" style={{ color: view === "map" ? "#86bb4a" : "#6b8f4e" }}>{t.navMap}</span>
             <button
               onClick={() => setLang(lang === "es" ? "en" : "es")}
               className="flex items-center gap-1.5 text-sm px-3 py-2 rounded-full font-semibold transition-all hover:opacity-90"
@@ -499,91 +503,125 @@ export default function App() {
 
       {/* LISTINGS */}
       <div className="max-w-5xl mx-auto px-8 py-16">
-        <div className="flex items-end justify-between mb-8">
-          <div>
-            <h2 className="text-3xl font-black" style={{ color: "#e8f5d0", fontFamily: "'Playfair Display', serif" }}>
-              {t.destinationsTitle}
-            </h2>
-            <p className="text-sm mt-1" style={{ color: "#6b8f4e" }}>
-              {aiMatches !== null ? t.aiPoweredResults : loading ? t.loading : error ? error : `${filtered.length} ${t.propertiesFound}`}
-            </p>
-          </div>
-          <Coffee size={20} style={{ color: "#86bb4a" }} />
-        </div>
+        {(() => {
+          const showTeaser = aiMatches === null && activeTag === "Todo";
+          return (
+            <>
+              {showTeaser ? (
+                <div className="mb-8">
+                  <h2 className="text-3xl font-black" style={{ color: "#e8f5d0", fontFamily: "'Playfair Display', serif" }}>
+                    {t.showcaseTitle}
+                  </h2>
+                  <p className="text-sm mt-1" style={{ color: "#6b8f4e" }}>
+                    {t.showcaseSubtitle}
+                  </p>
+                </div>
+              ) : (
+                <div className="flex items-end justify-between mb-8">
+                  <div>
+                    <h2 className="text-3xl font-black" style={{ color: "#e8f5d0", fontFamily: "'Playfair Display', serif" }}>
+                      {t.destinationsTitle}
+                    </h2>
+                    <p className="text-sm mt-1" style={{ color: "#6b8f4e" }}>
+                      {aiMatches !== null ? t.aiPoweredResults : loading ? t.loading : error ? error : `${filtered.length} ${t.propertiesFound}`}
+                    </p>
+                  </div>
+                  <Coffee size={20} style={{ color: "#86bb4a" }} />
+                </div>
+              )}
 
-        {/* TAG FILTER */}
-        <div className="flex gap-2 mb-8 flex-wrap">
-          {TAGS.map((tag, i) => (
-            <button
-              key={tag}
-              onClick={() => { setActiveTag(tag); setAiMatches(null); setApiError(null); }}
-              className="text-sm px-4 py-1.5 rounded-full font-medium transition-all"
-              style={
-                activeTag === tag
-                  ? { background: "linear-gradient(135deg,#86bb4a,#5a8a2a)", color: "#0a0f0a" }
-                  : { background: "transparent", color: "#e8f5d0", border: "1px solid rgba(255,255,255,0.4)" }
-              }
-            >
-              {t[TAG_KEYS[i]]}
-            </button>
-          ))}
-        </div>
+              {/* TAG FILTER — siempre visible */}
+              <div className="flex gap-2 mb-8 flex-wrap">
+                {TAGS.map((tag, i) => (
+                  <button
+                    key={tag}
+                    onClick={() => { setActiveTag(tag); setAiMatches(null); setApiError(null); }}
+                    className="text-sm px-4 py-1.5 rounded-full font-medium transition-all"
+                    style={
+                      activeTag === tag
+                        ? { background: "linear-gradient(135deg,#86bb4a,#5a8a2a)", color: "#0a0f0a" }
+                        : { background: "transparent", color: "#e8f5d0", border: "1px solid rgba(255,255,255,0.4)" }
+                    }
+                  >
+                    {t[TAG_KEYS[i]]}
+                  </button>
+                ))}
+              </div>
 
-        {loading && (
-          <div className="text-center py-20" style={{ color: "#6b8f4e" }}>
-            <Bird size={40} className="mx-auto mb-3 opacity-30 animate-pulse" />
-            <p>{t.loading}</p>
-          </div>
-        )}
+              {loading && (
+                <div className="text-center py-20" style={{ color: "#6b8f4e" }}>
+                  <Bird size={40} className="mx-auto mb-3 opacity-30 animate-pulse" />
+                  <p>{t.loading}</p>
+                </div>
+              )}
 
-        {error && !loading && (
-          <div className="text-center py-20" style={{ color: "#ff8080" }}>
-            <p>{error}</p>
-          </div>
-        )}
+              {error && !loading && (
+                <div className="text-center py-20" style={{ color: "#ff8080" }}>
+                  <p>{error}</p>
+                </div>
+              )}
 
-        {apiError && (
-          <div className="mb-6 p-4 rounded-xl text-sm" style={{ background: "rgba(255,120,120,0.1)", border: "1px solid rgba(255,120,120,0.3)", color: "#ffa0a0" }}>
-            {apiError}
-          </div>
-        )}
+              {apiError && (
+                <div className="mb-6 p-4 rounded-xl text-sm" style={{ background: "rgba(255,120,120,0.1)", border: "1px solid rgba(255,120,120,0.3)", color: "#ffa0a0" }}>
+                  {apiError}
+                </div>
+              )}
 
-        {aiMatches !== null && aiMatches.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {aiMatches.map((p, idx) => (
-              <PropertyCard
-                key={p.id ?? idx}
-                property={p}
-                onClick={() => setSelectedProperty(p)}
-                t={t}
-                isAiSuggested={idx < 2}
-                aiPitch={idx < 2 ? (p.ai_personalized_pitch ?? "") : ""}
-              />
-            ))}
-          </div>
-        )}
+              {showTeaser ? (
+                !loading && !error && (
+                  <DestinationShowcase
+                    properties={properties}
+                    loading={loading}
+                    t={t}
+                    onSelect={(property) => {
+                      setFocusPropertyId(property.id);
+                      setView("map");
+                    }}
+                  />
+                )
+              ) : (
+                <>
+                  {aiMatches !== null && aiMatches.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      {aiMatches.map((p, idx) => (
+                        <PropertyCard
+                          key={p.id ?? idx}
+                          property={p}
+                          onClick={() => setSelectedProperty(p)}
+                          t={t}
+                          isAiSuggested={idx < 2}
+                          aiPitch={idx < 2 ? (p.ai_personalized_pitch ?? "") : ""}
+                        />
+                      ))}
+                    </div>
+                  )}
 
-        {aiMatches !== null && aiMatches.length === 0 && !apiError && (
-          <div className="text-center py-20" style={{ color: "#6b8f4e" }}>
-            <Bird size={40} className="mx-auto mb-3 opacity-30" />
-            <p>{t.aiNoResults}</p>
-          </div>
-        )}
+                  {aiMatches !== null && aiMatches.length === 0 && !apiError && (
+                    <div className="text-center py-20" style={{ color: "#6b8f4e" }}>
+                      <Bird size={40} className="mx-auto mb-3 opacity-30" />
+                      <p>{t.aiNoResults}</p>
+                    </div>
+                  )}
 
-        {aiMatches === null && !loading && !error && filtered.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {filtered.map((p) => (
-              <PropertyCard key={p.id} property={p} onClick={() => setSelectedProperty(p)} t={t} />
-            ))}
-          </div>
-        )}
+                  {aiMatches === null && !loading && !error && filtered.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      {filtered.map((p) => (
+                        <PropertyCard key={p.id} property={p} onClick={() => setSelectedProperty(p)} t={t} />
+                      ))}
+                    </div>
+                  )}
 
-        {aiMatches === null && !loading && !error && filtered.length === 0 && (
-          <div className="text-center py-20" style={{ color: "#6b8f4e" }}>
-            <Bird size={40} className="mx-auto mb-3 opacity-30" />
-            <p>{t.noDestinations}</p>
-          </div>
-        )}
+                  {aiMatches === null && !loading && !error && filtered.length === 0 && (
+                    <div className="text-center py-20" style={{ color: "#6b8f4e" }}>
+                      <Bird size={40} className="mx-auto mb-3 opacity-30" />
+                      <p>{t.noDestinations}</p>
+                    </div>
+                  )}
+                </>
+              )}
+            </>
+          );
+        })()}
       </div>
 
       {/* FOOTER */}
@@ -609,7 +647,13 @@ export default function App() {
           <MapView
             onBack={() => setView("home")}
             t={t}
-            matchIds={aiMatches?.length ? aiMatches.map((m) => m.id).filter((id) => id != null) : null}
+            matchIds={
+              aiMatches?.length
+                ? aiMatches.map((m) => m.id).filter((id) => id != null)
+                : focusPropertyId
+                ? [focusPropertyId]
+                : null
+            }
           />
           <div className="cloud-layer" aria-hidden="true">
             <span className="cloud cloud-1" />
