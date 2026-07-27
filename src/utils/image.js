@@ -37,7 +37,7 @@ export function getImageUrl(record) {
     record.image || record.imagen_principal || record.image_url || "";
   const url = (typeof raw === "string" ? raw : "").trim();
   const usePlaceholder =
-    !url || (!url.startsWith("http://") && !url.startsWith("https://"));
+    !url || (!url.startsWith("http://") && !url.startsWith("https://") && !url.startsWith("/"));
   const final = usePlaceholder ? PLACEHOLDER_IMAGE : url;
   logImage(record, raw, final, usePlaceholder);
   return final;
