@@ -659,13 +659,26 @@ export default function App() {
                 : null
             }
           />
-          <div className="cloud-layer" aria-hidden="true">
-            <span className="cloud cloud-1" />
-            <span className="cloud cloud-2" />
-            <span className="cloud cloud-3" />
-            <span className="cloud cloud-4" />
-            <span className="cloud cloud-5" />
-          </div>
+        </div>
+      )}
+
+      {/* Nubes: arrancan desde que la IA empieza a buscar y siguen hasta que se abre el mapa */}
+      {(searchLoading || view === "map") && (
+        <div className="cloud-layer" aria-hidden="true">
+          <span className="cloud cloud-1" />
+          <span className="cloud cloud-2" />
+          <span className="cloud cloud-3" />
+          <span className="cloud cloud-4" />
+          <span className="cloud cloud-5" />
+          <span className="cloud cloud-6" />
+          <span className="cloud cloud-7" />
+          <span className="cloud cloud-8" />
+          <span className="cloud cloud-9" />
+          <span className="cloud cloud-10" />
+          <span className="cloud cloud-11" />
+          <span className="cloud cloud-12" />
+          <span className="cloud cloud-13" />
+          <span className="cloud cloud-14" />
         </div>
       )}
     </div>
