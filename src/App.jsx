@@ -278,6 +278,15 @@ export default function App() {
   const [aiMatches, setAiMatches] = useState(null);
   const [apiError, setApiError] = useState(null);
   const [focusPropertyId, setFocusPropertyId] = useState(null);
+  const [mapClosing, setMapClosing] = useState(false);
+
+  const closeMap = () => {
+    setMapClosing(true);
+    window.setTimeout(() => {
+      setView("home");
+      setMapClosing(false);
+    }, 480);
+  };
 
   const t = translations[lang];
 
@@ -647,9 +656,9 @@ export default function App() {
       )}
 
       {view === "map" && (
-        <div className="map-overlay map-overlay--enter">
+        <div className={`map-overlay ${mapClosing ? "map-overlay--exit" : "map-overlay--enter"}`}>
           <MapView
-            onBack={() => setView("home")}
+            onBack={closeMap}
             t={t}
             matchIds={
               aiMatches?.length
@@ -662,8 +671,8 @@ export default function App() {
         </div>
       )}
 
-      {/* Nubes: arrancan desde que la IA empieza a buscar y siguen hasta que se abre el mapa */}
-      {(searchLoading || view === "map") && (
+      {/* Nubes: fluyen desde que la IA empieza a buscar, durante el mapa, y al volver a Explorar */}
+      {(searchLoading || view === "map" || mapClosing) && (
         <div className="cloud-layer" aria-hidden="true">
           <span className="cloud cloud-1" />
           <span className="cloud cloud-2" />
@@ -679,6 +688,12 @@ export default function App() {
           <span className="cloud cloud-12" />
           <span className="cloud cloud-13" />
           <span className="cloud cloud-14" />
+          <span className="cloud cloud-15" />
+          <span className="cloud cloud-16" />
+          <span className="cloud cloud-17" />
+          <span className="cloud cloud-18" />
+          <span className="cloud cloud-19" />
+          <span className="cloud cloud-20" />
         </div>
       )}
     </div>

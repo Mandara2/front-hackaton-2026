@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Transición suave al abrir el mapa desde la barra de navegación */
+/* Transición suave al abrir/cerrar el mapa desde la barra de navegación */
 .map-overlay {
   position: fixed;
   inset: 0;
@@ -10,7 +10,11 @@
   pointer-events: auto;
 }
 .map-overlay--enter {
-  animation: mapSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: mapSlideIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+.map-overlay--exit {
+  animation: mapSlideOut 0.5s cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
+  pointer-events: none;
 }
 @keyframes mapSlideIn {
   from {
@@ -20,6 +24,16 @@
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+@keyframes mapSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(100%);
   }
 }
 
@@ -32,7 +46,7 @@
   font-family: inherit;
 }
 
-/* Nubes decorativas: cruzan la pantalla desde que la IA empieza a buscar hasta que se abre el mapa */
+/* Nubes decorativas: fluyen sin parar mientras la IA busca, al abrir el mapa y al volver a Explorar */
 .cloud-layer {
   position: fixed;
   inset: 0;
@@ -55,27 +69,33 @@
   opacity: 0;
   animation-name: cloudDrift;
   animation-timing-function: ease-in-out;
-  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
 }
-.cloud-1  { top: 5%;  --cloud-scale: 0.6;  animation-duration: 2.6s; animation-delay: 0s; }
-.cloud-2  { top: 14%; --cloud-scale: 1.4;  animation-duration: 3.8s; animation-delay: 0.2s; }
-.cloud-3  { top: 22%; --cloud-scale: 0.9;  animation-duration: 3.0s; animation-delay: 0.5s; }
-.cloud-4  { top: 30%; --cloud-scale: 1.8;  animation-duration: 4.5s; animation-delay: 0.1s; }
-.cloud-5  { top: 38%; --cloud-scale: 0.5;  animation-duration: 2.4s; animation-delay: 0.9s; }
-.cloud-6  { top: 46%; --cloud-scale: 1.2;  animation-duration: 3.4s; animation-delay: 1.3s; }
-.cloud-7  { top: 54%; --cloud-scale: 2.0;  animation-duration: 5.2s; animation-delay: 0.4s; }
-.cloud-8  { top: 62%; --cloud-scale: 0.7;  animation-duration: 2.8s; animation-delay: 1.6s; }
-.cloud-9  { top: 70%; --cloud-scale: 1.6;  animation-duration: 4.0s; animation-delay: 0.8s; }
-.cloud-10 { top: 78%; --cloud-scale: 0.45; animation-duration: 2.3s; animation-delay: 2.0s; }
-.cloud-11 { top: 86%; --cloud-scale: 1.1;  animation-duration: 3.6s; animation-delay: 1.1s; }
-.cloud-12 { top: 92%; --cloud-scale: 0.85; animation-duration: 3.1s; animation-delay: 2.4s; }
-.cloud-13 { top: 10%; --cloud-scale: 1.5;  animation-duration: 4.2s; animation-delay: 1.8s; }
-.cloud-14 { top: 58%; --cloud-scale: 0.6;  animation-duration: 2.5s; animation-delay: 2.7s; }
+.cloud-1  { top: 3%;  --cloud-scale: 0.5;  animation-duration: 2.4s; animation-delay: 0s; }
+.cloud-2  { top: 9%;  --cloud-scale: 1.6;  animation-duration: 3.6s; animation-delay: 0.3s; }
+.cloud-3  { top: 15%; --cloud-scale: 0.8;  animation-duration: 2.8s; animation-delay: 0.6s; }
+.cloud-4  { top: 21%; --cloud-scale: 2.0;  animation-duration: 4.4s; animation-delay: 0.1s; }
+.cloud-5  { top: 27%; --cloud-scale: 0.45; animation-duration: 2.2s; animation-delay: 0.9s; }
+.cloud-6  { top: 33%; --cloud-scale: 1.3;  animation-duration: 3.2s; animation-delay: 1.2s; }
+.cloud-7  { top: 39%; --cloud-scale: 0.7;  animation-duration: 2.6s; animation-delay: 0.4s; }
+.cloud-8  { top: 45%; --cloud-scale: 1.8;  animation-duration: 4.0s; animation-delay: 1.5s; }
+.cloud-9  { top: 51%; --cloud-scale: 0.6;  animation-duration: 2.5s; animation-delay: 0.7s; }
+.cloud-10 { top: 57%; --cloud-scale: 1.1;  animation-duration: 3.0s; animation-delay: 1.8s; }
+.cloud-11 { top: 63%; --cloud-scale: 2.0;  animation-duration: 4.6s; animation-delay: 0.2s; }
+.cloud-12 { top: 69%; --cloud-scale: 0.5;  animation-duration: 2.3s; animation-delay: 2.1s; }
+.cloud-13 { top: 75%; --cloud-scale: 1.5;  animation-duration: 3.8s; animation-delay: 1.0s; }
+.cloud-14 { top: 81%; --cloud-scale: 0.9;  animation-duration: 2.9s; animation-delay: 2.4s; }
+.cloud-15 { top: 87%; --cloud-scale: 1.2;  animation-duration: 3.4s; animation-delay: 0.5s; }
+.cloud-16 { top: 93%; --cloud-scale: 0.4;  animation-duration: 2.2s; animation-delay: 2.7s; }
+.cloud-17 { top: 12%; --cloud-scale: 1.7;  animation-duration: 4.2s; animation-delay: 1.6s; }
+.cloud-18 { top: 48%; --cloud-scale: 0.55; animation-duration: 2.4s; animation-delay: 3.0s; }
+.cloud-19 { top: 72%; --cloud-scale: 1.9;  animation-duration: 4.8s; animation-delay: 0.8s; }
+.cloud-20 { top: 90%; --cloud-scale: 0.65; animation-duration: 2.6s; animation-delay: 2.0s; }
 
 @keyframes cloudDrift {
   0%   { transform: translateX(-10vw) scale(var(--cloud-scale, 1)); opacity: 0; }
   12%  { opacity: 0.9; }
-  80%  { opacity: 0.9; }
+  85%  { opacity: 0.9; }
   100% { transform: translateX(160vw) scale(var(--cloud-scale, 1)); opacity: 0; }
 }
 
