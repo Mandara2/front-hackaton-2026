@@ -54,7 +54,6 @@ export const translations = {
     aiSugiere: "IA Sugiere",
     aiNoResults: "No encontramos destinos con esa búsqueda. Prueba con otras palabras.",
     aiPoweredResults: "Recomendaciones con IA",
-    apiError: "No se pudo conectar con el servidor. ¿Está el backend en ejecución en el puerto 8000?",
   },
   en: {
     navExplore: "Explore",
@@ -111,7 +110,6 @@ export const translations = {
     aiSugiere: "AI Suggests",
     aiNoResults: "No destinations found with that search. Try other words.",
     aiPoweredResults: "AI-powered recommendations",
-    apiError: "Could not connect to the server. Is the backend running on port 8000?",
   },
 };
 

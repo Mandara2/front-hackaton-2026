@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 import { Search, MapPin, Star, Mic, Bird, Coffee, Wifi, Car, UtensilsCrossed, ChevronRight, X, Calendar, Users, Globe, Languages, Loader2, Sparkles } from "lucide-react";
-import { getProperties, postBookings, postSearch } from "./api/client";
+import { getProperties, postBookings } from "./api/client";
 import MapView from "./components/MapView";
 import DestinationShowcase from "./components/DestinationShowcase";
 import { translations, TAG_KEYS } from "./i18n/translations";
 import { getImageUrl, handleImageError } from "./utils/image";
+import { simulateAiSearch } from "./utils/localSearch";
 
 const AMENITY_ICONS = {
   wifi: { icon: Wifi, label: "WiFi" },
@@ -276,7 +277,6 @@ export default function App() {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [searchLoading, setSearchLoading] = useState(false);
   const [aiMatches, setAiMatches] = useState(null);
-  const [apiError, setApiError] = useState(null);
   const [focusPropertyId, setFocusPropertyId] = useState(null);
   const [mapClosing, setMapClosing] = useState(false);
 
@@ -316,18 +316,16 @@ export default function App() {
     const q = query.trim();
     if (q) {
       setSearchLoading(true);
-      setApiError(null);
       setAiMatches(null);
       setFocusPropertyId(null);
       try {
-        const data = await postSearch(q, lang);
-        const matches = Array.isArray(data?.data?.matches) ? data.data.matches : [];
+        // Búsqueda con IA simulada 100% local (sin red) para no depender de
+        // internet en vivo durante la demo. El retraso artificial mantiene la
+        // sensación de "IA pensando" que ya tiene la barra de búsqueda.
+        await new Promise((resolve) => setTimeout(resolve, 900 + Math.random() * 600));
+        const matches = simulateAiSearch(properties, q, lang);
         setAiMatches(matches);
-        setApiError(null);
         setView("map");
-      } catch (err) {
-        setApiError(err?.message || t.apiError);
-        setAiMatches([]);
       } finally {
         setSearchLoading(false);
       }
@@ -546,7 +544,7 @@ export default function App() {
                 {TAGS.map((tag, i) => (
                   <button
                     key={tag}
-                    onClick={() => { setActiveTag(tag); setAiMatches(null); setApiError(null); }}
+                    onClick={() => { setActiveTag(tag); setAiMatches(null); }}
                     className="text-sm px-4 py-1.5 rounded-full font-medium transition-all"
                     style={
                       activeTag === tag
@@ -569,12 +567,6 @@ export default function App() {
               {error && !loading && (
                 <div className="text-center py-20" style={{ color: "#ff8080" }}>
                   <p>{error}</p>
-                </div>
-              )}
-
-              {apiError && (
-                <div className="mb-6 p-4 rounded-xl text-sm" style={{ background: "rgba(255,120,120,0.1)", border: "1px solid rgba(255,120,120,0.3)", color: "#ffa0a0" }}>
-                  {apiError}
                 </div>
               )}
 
@@ -607,7 +599,7 @@ export default function App() {
                     </div>
                   )}
 
-                  {aiMatches !== null && aiMatches.length === 0 && !apiError && (
+                  {aiMatches !== null && aiMatches.length === 0 && (
                     <div className="text-center py-20" style={{ color: "#6b8f4e" }}>
                       <Bird size={40} className="mx-auto mb-3 opacity-30" />
                       <p>{t.aiNoResults}</p>
