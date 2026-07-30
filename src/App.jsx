@@ -378,12 +378,13 @@ export default function App() {
           <div className="flex items-center gap-4">
             <span role="button" onClick={() => setView("home")} className="text-sm cursor-pointer transition-colors hover:text-green-400" style={{ color: view === "home" ? "#86bb4a" : "#6b8f4e" }}>{t.navExplore}</span>
             <span role="button" onClick={() => { setAiMatches(null); setFocusPropertyId(null); setView("map"); }} className="text-sm cursor-pointer transition-colors hover:text-green-400" style={{ color: view === "map" ? "#86bb4a" : "#6b8f4e" }}>{t.navMap}</span>
-            <img
-              src="/imgs/neo-astrum-logo.png"
-              alt="Neo Astrum"
-              title="Desarrollado por Neo Astrum"
-              className="h-8 w-8 object-contain"
-            />
+            <div
+              className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-full font-medium"
+              style={{ background: "rgba(255,255,255,0.08)", color: "#e8f5d0", border: "1px solid rgba(134,187,74,0.35)" }}
+            >
+              <img src="/imgs/neo-astrum-logo.png" alt="Neo Astrum" className="h-5 w-5 object-contain" />
+              <span>Desarrollado por Neo Astrum</span>
+            </div>
             <button
               onClick={() => setLang(lang === "es" ? "en" : "es")}
               className="flex items-center gap-1.5 text-sm px-3 py-2 rounded-full font-semibold transition-all hover:opacity-90"
