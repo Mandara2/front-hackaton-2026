@@ -358,7 +358,7 @@ export default function App() {
       `}</style>
 
       {/* HERO */}
-      <div className="relative min-h-screen flex flex-col justify-end pb-24" style={{ minHeight: "100vh" }}>
+      <div className="relative min-h-screen flex flex-col justify-center" style={{ minHeight: "100vh" }}>
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -401,11 +401,6 @@ export default function App() {
 
         {/* HERO CONTENT */}
         <div className="relative z-10 max-w-4xl mx-auto px-8 pb-12 text-center">
-          <div className="fade-up fade-up-1 mb-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full" style={{ background: "rgba(134,187,74,0.1)", border: "1px solid rgba(134,187,74,0.25)" }}>
-            <div className="w-1.5 h-1.5 rounded-full" style={{ background: "#86bb4a", animation: "pulse-slow 2s infinite" }} />
-            <span className="text-xs font-medium" style={{ color: "#86bb4a" }}>{t.heroBadge}</span>
-          </div>
-
           <h1 className="fade-up fade-up-2 text-5xl md:text-7xl font-black leading-tight mb-4" style={{ color: "#e8f5d0", fontFamily: "'Playfair Display', serif" }}>
             {t.heroTitle1}<br />
             <em style={{ color: "#86bb4a" }}>{t.heroTitle2}</em><br />
